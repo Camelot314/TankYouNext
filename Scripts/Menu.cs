@@ -5,15 +5,17 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
-
     #region Public Methods
     /// <summary>
     /// Quits the game when called.
     /// </summary>
     public void Quit()
     {
-        Debug.Log("Quitting");
-        Application.Quit();
+        if (!Level.IsWebMode())
+        {
+            Debug.Log("Quitting");
+            Application.Quit();
+        }
     }
 
     /// <summary>
