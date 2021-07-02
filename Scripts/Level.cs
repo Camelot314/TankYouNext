@@ -18,6 +18,7 @@ public class Level : MonoBehaviour
     #endregion
 
     #region Static variables
+    private static bool webMode = false;                 // If it is in webMode then it will not make the cursor Invisible or lock the cursor.
     private static bool setEnd;                         // Static boolean that keeps track of if the game should end (used by the enemyClass
                                                         //      which cannot get a direct access to the level instance).
     private static Level instance; 
@@ -80,7 +81,10 @@ public class Level : MonoBehaviour
         Level.setEnd = setEnd;
     }
 
-
+    /// <summary>
+    /// Gets the instance of the level class.
+    /// </summary>
+    /// <returns>instance of Level.</returns>
     public static Level GetInsance()
     {
         if (instance != null)
@@ -88,6 +92,15 @@ public class Level : MonoBehaviour
             return instance;
         }
         return null;
+    }
+
+    /// <summary>
+    /// Returns true if the game is in webmode;
+    /// </summary>
+    /// <returns>True if it is webmode</returns>
+    public static bool IsWebMode()
+    {
+        return webMode;
     }
     #endregion
 
@@ -271,7 +284,7 @@ public class Level : MonoBehaviour
     {
         Cursor.visible = false;
         FreezeEverything(false, true);
-        if (debugRandom || testPrefab || disableObstacleCreation)
+        if (debugRandom || testPrefab || disableObstacleCreation || webMode)
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
@@ -317,7 +330,6 @@ public class Level : MonoBehaviour
         Enemy.Freeze(toFreeze);
         messageCanvas.SetActive(toFreeze);
         cameraScript.Pause(toFreeze);
-        Cursor.visible = toFreeze;
         player.FreezePlayer(toFreeze);
         if (toFreeze)
         {
@@ -327,7 +339,16 @@ public class Level : MonoBehaviour
         else
         {
             audioSource.Play();
-            Cursor.lockState = CursorLockMode.Locked;
+            if (!webMode)
+            {
+                Cursor.visible = toFreeze;
+                Cursor.lockState = CursorLockMode.Locked;
+            } else
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
         }
         if (isMenu)
         {
