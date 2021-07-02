@@ -11,12 +11,18 @@ public class PauseMenu : MonoBehaviour
 
     #region Public Methods
     /// <summary>
-    /// Quits the game when called.
+    /// Quits the game when called. It the game is in WebMode then it 
+    /// will not quit the game but it will take the game back to the 
+    /// main menu. Otherwise it will quit. 
     /// </summary>
     public void Quit()
     {
-        Debug.Log("Quitting");
-        Application.Quit();
+        if (!Level.IsWebMode())
+        {
+            Debug.Log("Quitting");
+            Application.Quit();
+        }
+        SceneManager.LoadScene(0);
     }
 
     /// <summary>
